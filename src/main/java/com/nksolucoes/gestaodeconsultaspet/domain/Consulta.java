@@ -20,7 +20,7 @@ public class Consulta implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date dataConsulta;
 	private Integer status;
 
@@ -28,16 +28,20 @@ public class Consulta implements Serializable {
 	@JoinColumn(name = "veterinario_id")
 	private Veterinario veterinario;
 
-	public Consulta() {
+	@ManyToOne
+	@JoinColumn(name = "animal_id")
+	private Animal animal;
 
+	public Consulta() {
 	}
 
-	public Consulta(Integer id, Date dataConsulta, StatusConsulta status, Veterinario veterinario) {
+	public Consulta(Integer id, Date dataConsulta, StatusConsulta status, Veterinario veterinario, Animal animal) {
 		super();
 		this.id = id;
 		this.dataConsulta = dataConsulta;
 		this.status = status.getStatus();
 		this.veterinario = veterinario;
+		this.animal = animal;
 	}
 
 	public Integer getId() {
@@ -70,6 +74,14 @@ public class Consulta implements Serializable {
 
 	public void setVeterinario(Veterinario veterinario) {
 		this.veterinario = veterinario;
+	}
+
+	public Animal getAnimal() {
+		return animal;
+	}
+
+	public void setAnimal(Animal animal) {
+		this.animal = animal;
 	}
 
 	@Override

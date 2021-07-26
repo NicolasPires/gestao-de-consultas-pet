@@ -1,6 +1,5 @@
 package com.nksolucoes.gestaodeconsultaspet.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,8 +16,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Veterinario implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Tutor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,18 +25,17 @@ public class Veterinario implements Serializable {
 	private String email;
 
 	@ElementCollection
-	@CollectionTable(name = "TELEFONES_VETERINARIOS")
+	@CollectionTable(name = "TELEFONES_TUTORES")
 	private Set<String> telefones = new HashSet<>();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "veterinario")
-	private List<Consulta> consultas = new ArrayList<>();
+	@OneToMany(mappedBy="tutor")
+	private List<Animal> animais = new ArrayList<>();
 
-	public Veterinario() {
-
+	public Tutor() {
 	}
 
-	public Veterinario(Integer id, String nome, String email) {
+	public Tutor(Integer id, String nome, String email) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -77,12 +74,12 @@ public class Veterinario implements Serializable {
 		this.telefones = telefones;
 	}
 
-	public List<Consulta> getConsultas() {
-		return consultas;
+	public List<Animal> getAnimais() {
+		return animais;
 	}
 
-	public void setConsultas(List<Consulta> consultas) {
-		this.consultas = consultas;
+	public void setAnimais(List<Animal> animais) {
+		this.animais = animais;
 	}
 
 	@Override
@@ -101,7 +98,7 @@ public class Veterinario implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Veterinario other = (Veterinario) obj;
+		Tutor other = (Tutor) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

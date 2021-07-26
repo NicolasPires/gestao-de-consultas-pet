@@ -1,48 +1,53 @@
 package com.nksolucoes.gestaodeconsultaspet.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nksolucoes.gestaodeconsultaspet.domain.enums.EspecieAnimal;
 
 @Entity
-public class Veterinario implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Animal {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	private String email;
+	private Integer especie;
+	private String raca;
+	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+	private Date dataNascimento;
 
-	@ElementCollection
-	@CollectionTable(name = "TELEFONES_VETERINARIOS")
-	private Set<String> telefones = new HashSet<>();
+	@ManyToOne
+	@JoinColumn(name = "tutor_id")
+	private Tutor tutor;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "veterinario")
-	private List<Consulta> consultas = new ArrayList<>();
+	@OneToMany(mappedBy = "animal")
+	List<Consulta> consultas = new ArrayList<>();
 
-	public Veterinario() {
-
+	public Animal() {
 	}
 
-	public Veterinario(Integer id, String nome, String email) {
+	public Animal(Integer id, String nome, EspecieAnimal especie, String raca, Date dataNascimento, Tutor tutor) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.email = email;
+		this.especie = especie.getEspecie();
+		this.raca = raca;
+		this.dataNascimento = dataNascimento;
+		this.tutor = tutor;
 	}
 
 	public Integer getId() {
@@ -61,20 +66,36 @@ public class Veterinario implements Serializable {
 		this.nome = nome;
 	}
 
-	public String getEmail() {
-		return email;
+	public EspecieAnimal getEspecie() {
+		return EspecieAnimal.toEnum(especie);
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEspecie(EspecieAnimal especie) {
+		this.especie = especie.getEspecie();
 	}
 
-	public Set<String> getTelefones() {
-		return telefones;
+	public String getRaca() {
+		return raca;
 	}
 
-	public void setTelefones(Set<String> telefones) {
-		this.telefones = telefones;
+	public void setRaca(String raca) {
+		this.raca = raca;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+	
+	public Tutor getTutor() {
+		return tutor;
+	}
+
+	public void setTutor(Tutor tutor) {
+		this.tutor = tutor;
 	}
 
 	public List<Consulta> getConsultas() {
@@ -101,7 +122,7 @@ public class Veterinario implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Veterinario other = (Veterinario) obj;
+		Animal other = (Animal) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -109,5 +130,6 @@ public class Veterinario implements Serializable {
 			return false;
 		return true;
 	}
+
 
 }
