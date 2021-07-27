@@ -14,6 +14,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.nksolucoes.gestaodeconsultaspet.domain.Tutor;
 import com.nksolucoes.gestaodeconsultaspet.services.TutorService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/tutores")
 public class TutorResource {
@@ -21,12 +25,14 @@ public class TutorResource {
 	@Autowired
 	private TutorService service;
 
+	@ApiOperation("Busca totores.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Tutor obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 	};
 	
+	@ApiOperation("Insere tutores.")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Tutor obj) {
 		obj = service.insert(obj);
@@ -35,6 +41,7 @@ public class TutorResource {
 
 	}
 	
+	@ApiOperation("Atualiza tutores.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Tutor obj, @PathVariable Integer id) {
 		obj.setId(id);
@@ -42,6 +49,10 @@ public class TutorResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation("Deleta tutores.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Não é possível excluir tutores que possuem animais vinculados"),
+			@ApiResponse(code = 404, message = "Código inexistente") })
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);

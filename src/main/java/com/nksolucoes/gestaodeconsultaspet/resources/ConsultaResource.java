@@ -14,6 +14,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.nksolucoes.gestaodeconsultaspet.domain.Consulta;
 import com.nksolucoes.gestaodeconsultaspet.services.ConsultaService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value = "/consultas")
 public class ConsultaResource {
@@ -21,12 +23,14 @@ public class ConsultaResource {
 	@Autowired
 	private ConsultaService service;
 
+	@ApiOperation("Busca consultas.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Consulta obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 	};
 	
+	@ApiOperation("Insere consultas.")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Consulta obj) {
 		obj = service.insert(obj);
@@ -35,6 +39,7 @@ public class ConsultaResource {
 
 	}
 	
+	@ApiOperation("Atualiza consultas.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Consulta obj, @PathVariable Integer id) {
 		obj.setId(id);
@@ -42,6 +47,7 @@ public class ConsultaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation("Deleta consultas.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);

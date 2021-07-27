@@ -14,6 +14,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.nksolucoes.gestaodeconsultaspet.domain.Animal;
 import com.nksolucoes.gestaodeconsultaspet.services.AnimalService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/animais")
 public class AnimalResource {
@@ -21,12 +25,14 @@ public class AnimalResource {
 	@Autowired
 	private AnimalService service;
 
+	@ApiOperation("Busca animais.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Animal obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 	};
 
+	@ApiOperation("Insere animais.")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Animal obj) {
 		obj = service.insert(obj);
@@ -35,6 +41,7 @@ public class AnimalResource {
 
 	}
 	
+	@ApiOperation("Atualiza animais.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Animal obj, @PathVariable Integer id) {
 		obj.setId(id);
@@ -42,6 +49,10 @@ public class AnimalResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation("Deleta animais.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "Não é possível excluir um animal vinculado a uma consulta"),
+			@ApiResponse(code = 404, message = "Código inexistente") })
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
