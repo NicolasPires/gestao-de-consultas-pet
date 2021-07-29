@@ -1,5 +1,6 @@
 package com.nksolucoes.gestaodeconsultaspet.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nksolucoes.gestaodeconsultaspet.domain.enums.EspecieAnimal;
 
 @Entity
-public class Animal {
+public class Animal implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,8 @@
 package com.nksolucoes.gestaodeconsultaspet.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nksolucoes.gestaodeconsultaspet.domain.Animal;
+import com.nksolucoes.gestaodeconsultaspet.dto.AnimalDTO;
 import com.nksolucoes.gestaodeconsultaspet.services.AnimalService;
 
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +31,7 @@ public class AnimalResource {
 	@ApiOperation("Busca animais.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Animal obj = service.buscar(id);
+		Animal obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	};
 
@@ -40,7 +43,7 @@ public class AnimalResource {
 		return ResponseEntity.created(uri).build();
 
 	}
-	
+
 	@ApiOperation("Atualiza animais.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Animal obj, @PathVariable Integer id) {
@@ -48,7 +51,7 @@ public class AnimalResource {
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@ApiOperation("Deleta animais.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Não é possível excluir um animal vinculado a uma consulta"),
@@ -58,6 +61,12 @@ public class AnimalResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<AnimalDTO>> findAll() {
+		List<Animal> list = service.findAll();
+		List<AnimalDTO> listDto = list.stream().map(obj -> new AnimalDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+
 }

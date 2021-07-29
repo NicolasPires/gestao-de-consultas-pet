@@ -1,5 +1,6 @@
 package com.nksolucoes.gestaodeconsultaspet.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class VeterinarioService {
 	@Autowired
 	private VeterinarioRepository repo;
 
-	public Veterinario buscar(Integer id) {
+	public Veterinario find(Integer id) {
 		Optional<Veterinario> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo " + Veterinario.class.getName()));
@@ -29,18 +30,22 @@ public class VeterinarioService {
 	}
 	
 	public Veterinario update(Veterinario obj) {
-		buscar(obj.getId());
+		find(obj.getId());
 		return repo.save(obj);
 	}
 
 	public void delete(Integer id) {
-		buscar(id);
+		find(id);
 		try {
 			repo.deleteById(id);
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possivel realizar a exclusão.");
 		}
+	}
+	
+	public List<Veterinario> findAll() {
+		return repo.findAll();
 	}
 	
 

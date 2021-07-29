@@ -1,6 +1,8 @@
 package com.nksolucoes.gestaodeconsultaspet.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nksolucoes.gestaodeconsultaspet.domain.Tutor;
+import com.nksolucoes.gestaodeconsultaspet.dto.TutorDTO;
 import com.nksolucoes.gestaodeconsultaspet.services.TutorService;
 
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +31,7 @@ public class TutorResource {
 	@ApiOperation("Busca totores.")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Tutor obj = service.buscar(id);
+		Tutor obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	};
 	
@@ -58,4 +61,11 @@ public class TutorResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<TutorDTO>> findAll() {
+		List<Tutor> list = service.findAll();
+		List<TutorDTO> listDTO = list.stream().map(obj -> new TutorDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	};
 }
